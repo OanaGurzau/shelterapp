@@ -2,11 +2,15 @@
 
 @section('content')
 <div class="container">
-      <div class="row">
-    <h2>Albume caini</h2>
-    <br>
+    <div class="row text-center">
+      <h1>Albume caini</h1>
+      <h3>Total albume: {{$albums->total()}}</h3>
+      <br>
     </div>
-    </div>
+    <a class="btn btn-info btn-lg pull-right" href="/albums/create/">Creaza un album</a>
+    
+</div>
+<br><br>
   @if(count($albums) > 0)
     <?php
       $colcount = count($albums);
@@ -20,14 +24,14 @@
           @if($i == $colcount)
              <div class='col-md-4 end'>
                <a href="/albums/{{$album->id}}">
-                  <img class="img-thumbnail" src="storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
+                  <img class="img-thumbnail" src="/storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
                 </a>
                <br>
                <h4>{{$album->name}}</h4>
           @else
             <div class='col-md-4 columns'>
               <a href="/albums/{{$album->id}}">
-                <img class="img-thumbnail" src="storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
+                <img class="img-thumbnail" src="/storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
               </a>
               <br>
               <h4>{{$album->name}}</h4>
@@ -39,66 +43,14 @@
           @endif
         	<?php $i++; ?>
         @endforeach
+        
       </div>
     </div>
     </div>
   @else
     <p>No Albums To Display</p>
   @endif
-
+  <div class="row text-center">
+    {{$albums->links()}}
+  </div>
 @endsection
-
-
-
-
-
-
-
-
-
-    {{--  @if(count($albums))
-     <div id="albums">
-     <div class="container">
-      <div class="row text-center">
-      @foreach($albums as $album)
-         <h4>{{$album->name}}</h4>
-            
-               <a href="dogs/albums/{{$album->id}}">
-                  <img class="thumbnail" src="storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
-                </a>
-            </div>
-        @endforeach
-    </div>
-    </div>
-    @endif
-    </div>  --}}
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-{{--  <div class="container">
-    <div class="row">
-        <h3>Albume</h3>
-        @foreach($albums as $album)
-        {{$album->name}}
-        @endforeach
-    </div>
-
-</div>
-
-@endsection
-
-<div class="row">
-    <div class=""
-</div>  --}}

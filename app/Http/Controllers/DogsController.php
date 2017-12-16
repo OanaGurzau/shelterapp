@@ -15,6 +15,7 @@ class DogsController extends Controller
      */
     public function index()
     {
+        
         $dogs=Dog::all();
         return view('dogs.list')->with('dogs', $dogs);
     }

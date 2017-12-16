@@ -23,7 +23,10 @@ Route::get('/', 'DogsAlbumsController@index');
 Route::get('/albums', 'DogsAlbumsController@index');
 Route::get('/albums/create', 'DogsAlbumsController@create');
 Route::post('/albums/store', 'DogsAlbumsController@store');
-Route::get('/albums/{id}', 'AlbumsController@show');
+Route::get('/albums/{id}', 'DogsAlbumsController@show');
+
+Route::get('/photos/create/{id}', 'DogsPhotosController@create');
+Route::post('/photos/store', 'DogsPhotosController@store');
 
 Auth::routes();
 
@@ -33,3 +36,4 @@ Route::get('/dashboard', 'DashboardController@index');
 Route::resource('adopters', 'AdoptersController');
 Route::resource('background', 'BackgroundController');
 Route::resource('medicalrecords', 'MedicalRecordsController');
+
