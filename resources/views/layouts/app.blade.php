@@ -20,6 +20,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -44,7 +45,9 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ '/albums/create' }}">Create Album</a></li>
+                        <li><a href="{{ '/albums/create' }}">Creaza Album</a></li>
+                        <li><a href="{{ '/medicalrecord' }}">Istoric Medical</a></li>
+
                         &nbsp;
                     </ul>
 

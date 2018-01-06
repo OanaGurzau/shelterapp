@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\MedicalRecord;
+use App\Dog;
+use DB;
 
 class MedicalRecordsController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      *
@@ -44,9 +47,16 @@ class MedicalRecordsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $medicalrecords=MedicalRecord::all();
+        $medicalrecords = DB::table('medicalrecord')
+        ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->get();
+        
+        return view('medical.show')
+            ->with('medicalrecords', $medicalrecords)
+        
+        ;
     }
 
     /**
@@ -57,7 +67,8 @@ class MedicalRecordsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $medicalrecord=MedicalRecord::find($id);
+        return view('medical.edit')-> with('medicalrecord', $medicalrecord);
     }
 
     /**
@@ -69,7 +80,26 @@ class MedicalRecordsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'rabies_vaccine_date' => 'sometimes',
+            'next_rabies_vaccine_date' => 'required',
+            'deworming_date' => 'sometimes',
+            'next_deworming_date' => 'required'
+
+        ]);
+
+            //update Medical Record
+
+            $medicalrecord =MedicalRecord::find($id);
+            $medicalrecord->rabies_vaccine_date=$request->input('rabies_vaccine_date');
+            $medicalrecord->next_rabies_vaccine_date=$request->input('next_rabies_vaccine_date');
+            $medicalrecord->deworming_date=$request->input('deworming_date');
+            $medicalrecord->next_deworming_date=$request->input('next_deworming_date');
+            $medicalrecord->sterilized = $request->input('sterilized');            
+            $medicalrecord->save();
+
+            return redirect('/medicalrecord')->with('success', 'Istoric medical salvat!');
+
     }
 
     /**
@@ -80,6 +110,10 @@ class MedicalRecordsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $medicalrecord=MedicalRecord::find($id);
+        $medicalrecord->delete();
+
+        return redirect('/medicalrecord')->with('success', 'Inregistrare Stearsa!');
+        
     }
 }

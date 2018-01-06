@@ -14,7 +14,7 @@ class DogsPhotosController extends Controller
 
     public function store(Request $request){
         $this->validate($request, [
-            'title' => 'required',
+            // 'title' => 'required',
             'photo' => 'image|max:1999'
         ]);
 

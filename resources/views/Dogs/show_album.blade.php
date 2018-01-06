@@ -7,8 +7,104 @@
     </div>
         <a class="btn btn-primary btn-lg" href="/albums">Inapoi la Albume</a>
         <a class="btn btn-info btn-lg pull-right" href="/photos/create/{{$album->id}}">Incarca poze in album</a>
+        <a class="btn btn-info btn-lg pull-right" href="/albums/{{$album->id}}/edit">Editeaza album</a><br><br>
+        {!!Form::open(['action' => ['DogsAlbumsController@destroy', $dogs->id], 'method' => 'DELETE', 'onsubmit' => 'return confirm("Sigur stergeti?")' ,'enctype' => 'multipart/form-data'])!!}
+            {{Form::bsSubmit('Delete', ['class'=> 'btn btn-dannger'])}}
+        {!! Form::close() !!}
+</div>
+<br><br>
 
-    </div>
+{{--  Animal details START  --}}
+
+<div class="container">
+  <div class="left">
+  <img src="/storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
+  </div>
+  <div class="right">
+    <dl class="row">
+      <dt class="col-sm-5 text-primary">Nume:</dt>
+        <dd class="col-sm-7">
+            @if($dogs!==null)
+              {{$dogs->name}}
+            @endif
+        </dd>
+      <dt class="col-sm-5 text-primary">Rasa:</dt>
+        <dd class="col-sm-7">
+            @if($dogs!==null)
+              {{$dogs->breed}}
+            @endif
+        </dd>
+      <dt class="col-sm-5 text-primary">Culoare:</dt>
+        <dd class="col-sm-7">
+            @if($dogs!==null)
+              {{$dogs->color}}
+            @endif
+        </dd>
+      <dt class="col-sm-5 text-primary">Sex:</dt>
+        <dd class="col-sm-7">
+            @if($dogs!==null)
+              {{$dogs->sex}}
+            @endif
+        </dd>
+
+      <dt class="col-sm-5 text-primary">Zi de nastere:</dt>
+        <dd class="col-sm-7">
+            @if($dogs!==null)
+              {{$dogs->birthdate}}
+            @endif
+        </dd>
+
+      <dt class="col-sm-5 text-primary">In adapost:</dt>
+        <dd class="col-sm-7">
+            @if($background!==null)
+              {{$background->join_shelter_date}}
+            @endif
+        </dd>
+
+      <dt class="col-sm-5 text-primary">Sterilizat:</dt>
+        <dd class="col-sm-7">
+            @if($medicalrecord!==null)
+              {{$medicalrecord->sterilized}}
+            @endif
+        </dd>
+
+
+      <dt class="col-sm-5 text-primary">Nota:</dt>
+        <dd class="col-sm-7">
+            @if($dogs!==null)
+              {{$dogs->notes}}
+            @endif
+        </dd>
+
+    </dl>
+  </div>
+
+<br style="clear:both" /><br>
+
+
+
+<hr>
+
+  <div class="descriptionbg">
+  <dt class="col-sm-2 text-primary">Descriere:</dt>
+    <dd class="col-sm-10 " style="border-radius: 15px 50px; border-style: 5px solid black;">
+      
+        @if($dogs->description!==null)
+          {{$dogs->description}}
+        @endif
+  </div>
+    </dd>
+
+
+
+
+<hr>
+
+
+
+<h2 class="text-primary"><b>Mai multe poze:</b></h2>
+</div>
+<br><br>
 
 
   @if(count($album->photos) > 0)   
@@ -19,7 +115,6 @@
      <div id="photos">
         <div class="container">
       <div class="row text-center">
-       <div class="card">
         @foreach($album->photos as $photo)
           @if($i == $colcount)
              <div class='col-md-4 end'>
@@ -35,7 +130,7 @@
                <h4>{{$photo->title}}</h4>
           @endif
         	@if($i % 3 == 0)
-          </div></div></div><div class="row text-center">
+          </div></div><div class="row text-center">
         	@else
             </div>
           @endif
@@ -45,15 +140,14 @@
     </div>
     </div>
   @else
-    <p>Nicio poza in album</p>
+    <div class="container">
+      <p>Fara alte poze</p>
+    </div>
   @endif
 
 
+  {{--  Animal detail ends  --}}
 
-
-<div class="container">
-<p>{{$dogs->name}}</p>
-</div>
 
 
 

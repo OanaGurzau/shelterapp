@@ -8,6 +8,7 @@
       <br>
     </div>
     <a class="btn btn-info btn-lg pull-right" href="/albums/create/">Creaza un album</a>
+
     
 </div>
 <br><br>
@@ -48,7 +49,9 @@
     </div>
     </div>
   @else
-    <p>No Albums To Display</p>
+    <div class="container">
+      <p>No Albums To Display</p>
+    </div>
   @endif
   <div class="row text-center">
     {{$albums->links()}}
