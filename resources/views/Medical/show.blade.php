@@ -1,72 +1,53 @@
 @extends('layouts.app')
-
 @section('content')
+
 <div class="container">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Istoric Medical</div>
-                    <table class="table">
-                        <tr>
-                            <td>Nume Caine</td>
+<h1 class="text-center">Istoric Medical</h1><a href="/medicalrecord" class="pull-right btn btn-primary btn-xs">Inapoi la istoric medical</a>
+<br>
 
-                            <td>ID Caine</td>
-                            <td>Data ultimului vaccin de rabie</td>
-                            <td>Urmatoarea data vaccinului de rabie</td>
-                            <td>Data ultimei deparazitari interne</td>
-                            <td>Data urmatoarei deparazitari interne</td>
-                            <td>Sterilizat</td>
-                            <td></td>
-                        </tr>
-
-
-    {{--  @if(count($dogs) > 0)
-        @foreach($dogs as $dog)
+<ul class="list-inline" style="font-size:20px">
         
-             {{--  <td><a href='/albums/{{$dog->id}}'>{{$dog->name}}</a></td>  --}}
-{{--               
-            
-        @endforeach
-@endif  --}}  
+        <li><strong>Id</strong></li>
+        <li>{{$medicalrecords->id}}</li>
+</ul>
 
+<hr>
 
-
-@foreach($medicalrecords as $key => $medicalrecord)
-    <tr>
-        <td><a href='/albums/{{$medicalrecord->id}}'>{{$medicalrecord->name }}</a></td>
-        <td>{{$medicalrecord->id}}</td>
-        <td>{{$medicalrecord->rabies_vaccine_date}}</td>
-        <td>{{$medicalrecord->next_rabies_vaccine_date}}</td>
-        <td>{{$medicalrecord->deworming_date}}</td>
-        <td>{{$medicalrecord->next_deworming_date}}</td>
-        <td>{{$medicalrecord->sterilized}}</td>
-        <td><a class="pull-right btn btn-default" href="medicalrecord/{{$medicalrecord->id}}/edit">EDIT</a></td>
-        <td>
-        {!!Form::open(['action' => ['MedicalRecordsController@destroy', $medicalrecord->id], 'method' => 'POST', 'onsubmit' => 'return confirm("Stergi inregistrarea?")'])!!}
-            {{Form::hidden('_method', 'DELETE')}}
-            {{Form::bsSubmit('Delete', ['class'=> 'btn btn-danger'])}}
-        {!! Form::close() !!}
-        </td>
-    </tr>
-
-
-
-
-
-
-
-
-@endforeach
-
-
-
-
-
-
-            </div>
+<ul class="list-inline" style="font-size:20px">
+        <li><strong>Ultimul vaccin</strong></li>
+        <li>{{$medicalrecords->rabies_vaccine_date->format('d.m.Y')}}</li>
+        <div class="pull-right">
+            <li><strong>Urmatorul vaccin</strong></li>
+            <li>{{$medicalrecords->next_rabies_vaccine_date->format('d.m.Y')}}</li>
         </div>
-    </div>
+       
+</ul>   
+<br> <hr> 
+
+<ul class="list-inline" style="font-size:20px">
+        <li><strong>Ultima deparazitare</strong></li>
+        <li>{{$medicalrecords->deworming_date->format('d.m.Y')}}</li>
+        <div class="pull-right">
+            <li><strong>Urmatoarea deparazitare</strong></li>
+            <li>{{$medicalrecords->next_deworming_date->format('d.m.Y')}}</li>
+        </div>
+</ul>
+
+<br><hr>
+
+<ul class="list-inline" style="font-size:20px">
+        <dt>Sterilizat/Castrat</dt>
+        <dd>{{$medicalrecords->sterilized ===0? 'Nu' :'Da'}}</dd>
+                
+</ul>
+
+   
+    
 </div>
+
+
+
+
 
 
 @endsection

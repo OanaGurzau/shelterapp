@@ -20,7 +20,6 @@
      <div class="album text-muted">
         <div class="container">
       <div class="row text-center">
-       <div class="card">
         @foreach($albums as $album)
           @if($i == $colcount)
              <div class='col-md-4 end'>
@@ -30,7 +29,7 @@
                <br>
                <h4>{{$album->name}}</h4>
           @else
-            <div class='col-md-4 columns'>
+            <div class='col-md-4 end'>
               <a href="/albums/{{$album->id}}">
                 <img class="img-thumbnail" src="/storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
               </a>
@@ -38,7 +37,7 @@
               <h4>{{$album->name}}</h4>
           @endif
         	@if($i % 3 == 0)
-          </div></div></div><div class="row text-center">
+          </div></div><div class="row text-center">
         	@else
             </div>
           @endif

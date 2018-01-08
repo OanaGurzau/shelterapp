@@ -12,10 +12,11 @@ class AdoptersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $timestamps = false;
     public function index()
     {
-        //
+        $adopter=Adopter::paginate(5);
+        return view('adopters.table')
+            ->with('adopters', $adopter);
     }
 
     /**
@@ -25,7 +26,7 @@ class AdoptersController extends Controller
      */
     public function create()
     {
-        //
+        return view('adopters.create');        
     }
 
     /**
@@ -36,7 +37,32 @@ class AdoptersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'address' => 'required',
+            'county' => 'required',
+            'city' => 'required',
+            'phone_number' =>'required|digits:10',
+            'email'=>'sometimes',
+            'last_home_visit'=>'sometimes',
+            'info'=>'sometimes'
+        ]);
+
+        //Create new adopter
+
+        $adopter=new Adopter;
+        $adopter->name=$request->input('name');
+        $adopter->address=$request->input('address');
+        $adopter->county=$request->input('county');
+        $adopter->city=$request->input('city');
+        $adopter->phone_number=$request->input('phone_number');
+        $adopter->email=$request->input('email');
+        $adopter->last_home_visit=$request->input('last_home_visit');
+        $adopter->info=$request->input('info');
+        $adopter->save();
+        
+        return redirect('/adopter')->with('success', 'Inregistrare adaugata cu succes!');
+        
     }
 
     /**
@@ -47,7 +73,10 @@ class AdoptersController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $adopter=Adopter::find($id);
+        return view('adopters.show')
+             ->with('adopter', $adopter);
     }
 
     /**
@@ -58,7 +87,8 @@ class AdoptersController extends Controller
      */
     public function edit($id)
     {
-        //
+       $adopter=Adopter::find($id);
+       return view('adopters.edit')->with('adopter', $adopter);
     }
 
     /**
@@ -70,7 +100,32 @@ class AdoptersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'address' => 'required',
+            'county' => 'required',
+            'city' => 'required',
+            'phone_number' =>'required|digits:10',
+            'email'=>'sometimes',
+            'last_home_visit'=>'sometimes',
+            'info'=>'sometimes'
+        ]);
+
+
+        $adopter=Adopter::find($id);
+        $adopter->name=$request->input('name');
+        $adopter->address=$request->input('address');
+        $adopter->county=$request->input('county');
+        $adopter->city=$request->input('city');
+        $adopter->phone_number=$request->input('phone_number');
+        $adopter->email=$request->input('email');
+        $adopter->last_home_visit=$request->input('last_home_visit');
+        $adopter->info=$request->input('info');
+        $adopter->save();
+        
+        return redirect('/adopter')->with('success', 'Inregistrare editata cu succes!');
+
+
     }
 
     /**
@@ -81,6 +136,9 @@ class AdoptersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $adopter=Adopter::find($id);
+        $adopter->delete();
+
+        return redirect('/adopter')->with('success', 'Inregistrare Stearsa!');
     }
 }

@@ -45,9 +45,12 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ '/albums/create' }}">Creaza Album</a></li>
+                        <li><a href="{{ '/albums' }}">Albume caini</a></li>
+                        <li><a href="{{ '/dogs' }}">Caini</a></li>
                         <li><a href="{{ '/medicalrecord' }}">Istoric Medical</a></li>
-
+                        <li><a href="{{ '/adopter' }}">Adoptatori</a></li>
+                        
+                        
                         &nbsp;
                     </ul>
 

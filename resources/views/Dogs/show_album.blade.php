@@ -50,21 +50,21 @@
       <dt class="col-sm-5 text-primary">Zi de nastere:</dt>
         <dd class="col-sm-7">
             @if($dogs!==null)
-              {{$dogs->birthdate}}
+              {{$dogs->birthdate->format('d.m.Y')}}
             @endif
         </dd>
 
       <dt class="col-sm-5 text-primary">In adapost:</dt>
         <dd class="col-sm-7">
             @if($background!==null)
-              {{$background->join_shelter_date}}
+              {{$background->join_shelter_date->format('d.m.Y')}}
             @endif
         </dd>
 
       <dt class="col-sm-5 text-primary">Sterilizat:</dt>
         <dd class="col-sm-7">
             @if($medicalrecord!==null)
-              {{$medicalrecord->sterilized}}
+              {{$medicalrecord->sterilized===0? 'Nu' :'Da'}}
             @endif
         </dd>
 

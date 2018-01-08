@@ -17,7 +17,12 @@ class MedicalRecordsController extends Controller
      */
     public function index()
     {
-        //
+        // $medicalrecords=MedicalRecord::all();
+        $medicalrecords = DB::table('medicalrecord')
+        ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->paginate(5);
+        
+        return view('medical.table')
+            ->with('medicalrecords', $medicalrecords);
     }
 
     /**
@@ -27,7 +32,8 @@ class MedicalRecordsController extends Controller
      */
     public function create()
     {
-        //
+        $dogs = Dog::pluck('name', 'id');
+        return view('medical.create')->with('dogsView', $dogs);
     }
 
     /**
@@ -38,7 +44,39 @@ class MedicalRecordsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'rabies_vaccine_date' => 'sometimes',
+            'next_rabies_vaccine_date' => 'required',
+            'deworming_date' => 'sometimes',
+            'next_deworming_date' => 'required'
+
+        ]);
+
+        //Link Dog
+
+        // $dogs = DB::table('dogs')
+        // ->join('medicalrecord', 'dogs.id', '=', 'medicalrecord.dog_id')
+        // ->select('dogs.name')
+        // ->get();
+
+       
+        $dogs = Dog::pluck('name', 'id');
+
+        //Create Medical Record
+        $medicalrecord= new MedicalRecord;
+        $medicalrecord->rabies_vaccine_date=$request->input('rabies_vaccine_date');
+        $medicalrecord->next_rabies_vaccine_date=$request->input('next_rabies_vaccine_date');
+        $medicalrecord->deworming_date=$request->input('deworming_date');
+        $medicalrecord->next_deworming_date=$request->input('next_deworming_date');
+        $medicalrecord->sterilized = $request->input('sterilized');   
+        $medicalrecord->dog_id =$request->input('dog_id');
+        
+
+        $medicalrecord->save();
+
+        return redirect('/medicalrecord')->with('success', 'Istoric medical creat!');
+
+
     }
 
     /**
@@ -47,11 +85,11 @@ class MedicalRecordsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        $medicalrecords=MedicalRecord::all();
-        $medicalrecords = DB::table('medicalrecord')
-        ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->get();
+        $medicalrecords=MedicalRecord::find($id);
+        // $medicalrecords = DB::table('medicalrecord')
+        // ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->get();
         
         return view('medical.show')
             ->with('medicalrecords', $medicalrecords)
@@ -65,7 +103,7 @@ class MedicalRecordsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id) 
     {
         $medicalrecord=MedicalRecord::find($id);
         return view('medical.edit')-> with('medicalrecord', $medicalrecord);

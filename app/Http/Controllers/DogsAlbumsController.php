@@ -111,20 +111,26 @@ class DogsAlbumsController extends Controller
         $medicalrecord->save();
 
 
-        //Add new cover image
+        // //Add new cover image
 
-        $filenameWithExt=$request->file('cover_image');          //get filename with ext
-        $filename=pathinfo($filenameWithExt, PATHINFO_FILENAME); //get only the filename
-        $extension=$request->file('cover_image');               //get only the extension
+        //get filename with extension
+        $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
+        
+        //get just the filename
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
 
-    if($filenameWithExt!==null){
-        $filenameToStore=$filename.'_'.time().'.'.$extension->getClientOriginalExtension();
-    }
-        $path=$request-> file('cover_image');
-    if($path!==null){
-        $path= $request-> file('cover_image')->storeAs('public/album_covers', $filenameToStore);
+        //get extension
+        $extension=$request->file('cover_image')->getClientOriginalExtension();
 
-    }    
+        //create new file name
+        
+        $filenameToStore=$filename.'_'.time().'.'.$extension;
+
+        //Upload Image
+
+        $path=$request->file('cover_image')->storeAs('public/album_covers', $filenameToStore); 
+
+        $album->cover_image = $filenameToStore;
         $album->save();
  
         

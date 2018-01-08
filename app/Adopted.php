@@ -8,7 +8,7 @@ class Adopted extends Model
 {
     protected $table = 'adopted';
     protected $guarded= ['id'];
-
+    public $timestamp=false;
 
     public function dog()
     {

@@ -10,6 +10,7 @@ class Dog extends Model
     protected $guarded= ['id'];
     public $timestamps = false;
     protected $fillable = array('name', 'breed', 'color','sex','microchip', 'birthdate', 'notes', 'description');
+    protected $dates=['birthdate'];
     
 
     public function background() {

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-        <h1>{{$title}}</h1>
-        <p>aici e index</p>
+        <img class="img-responsive" src="/storage/inc/banner.jpg" style="margin-top:-22px">
+        <h1 class="text-center">{{$title}}</h1>
+        
 @endsection

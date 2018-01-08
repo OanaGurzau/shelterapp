@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Dog;
+ 
 
 class DogsController extends Controller
 {
@@ -16,8 +19,8 @@ class DogsController extends Controller
     public function index()
     {
         
-        $dogs=Dog::all();
-        return view('dogs.list')->with('dogs', $dogs);
+        $dogs=Dog::paginate(5);
+        return view('dogs.table')->with('dogs', $dogs);
     }
 
     /**
@@ -27,7 +30,8 @@ class DogsController extends Controller
      */
     public function create()
     {
-        //
+        $dog = Dog::pluck('name', 'id');
+        return view('dogs.create')->with('dogView', $dog);
     }
 
     /**
@@ -38,7 +42,31 @@ class DogsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'breed' => 'required',
+            'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
+            'microchip' => 'digits:15', //digits also verify if numeric
+            'description'=> 'required',
+            'notes'=>'nullable',
+        ]);
+        
+        //Create Dog
+
+        $dogs=new Dog;
+        $dogs->name = $request->input('name');
+        $dogs->breed = $request->input('breed');
+        $dogs->color = $request->input('color');
+        $dogs->sex = $request->input('sex');
+        $dogs->microchip = $request->input('microchip');
+        $dogs->birthdate = $request->input('birthdate');
+        $dogs->notes = $request->input('notes');
+        $dogs->description = $request->input('description');
+        $dogs->adopted = $request->input('adopted');
+        
+        $dogs->save();
+
+
     }
 
     /**
@@ -49,7 +77,10 @@ class DogsController extends Controller
      */
     public function show($id)
     {
-        //
+        $dog=Dog::find($id);
+        return view('dogs.show')
+        ->with('dog', $dog);
+    
     }
 
     /**
@@ -60,7 +91,9 @@ class DogsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $dog=Dog::find($id);
+        return view('dogs.edit')->with('dog', $dog);
+        
     }
 
     /**
@@ -83,6 +116,10 @@ class DogsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $dogs=Dog::find($id);
+        $dogs->delete();
+
+        return redirect('/dogs')->with('success', 'Inregistrare stearsa');
+        
     }
 }
