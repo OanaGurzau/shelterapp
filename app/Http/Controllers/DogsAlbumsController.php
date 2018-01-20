@@ -17,7 +17,7 @@ class DogsAlbumsController extends Controller
 
     public function index(){
         $albums=DogAlbum::with('Photos')->get();
-        $albums=DogAlbum::paginate(15);
+        $albums=DogAlbum::paginate(9);
         return view('dogs.list_album')->with('albums', $albums);
     }
 
@@ -104,11 +104,7 @@ class DogsAlbumsController extends Controller
         $album->dog_id = $dogs->id;
 
 
-        //Medical Record
-        $medicalrecord = new MedicalRecord;
-        $medicalrecord->dog_id = $dogs->id;
-        $medicalrecord->sterilized = $request->input('sterilized');
-        $medicalrecord->save();
+       
 
 
         // //Add new cover image
@@ -132,6 +128,12 @@ class DogsAlbumsController extends Controller
 
         $album->cover_image = $filenameToStore;
         $album->save();
+
+         //Medical Record
+         $medicalrecord = new MedicalRecord;
+         $medicalrecord->dog_id = $dogs->id;
+         $medicalrecord->sterilized = $request->input('sterilized');
+         $medicalrecord->save();
  
         
         //Dogs Background
@@ -149,7 +151,7 @@ class DogsAlbumsController extends Controller
 
     
 
-
+ 
 
     public function show($id){
         $album=DogAlbum::with('Photos')->find($id);

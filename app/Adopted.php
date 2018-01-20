@@ -8,16 +8,17 @@ class Adopted extends Model
 {
     protected $table = 'adopted';
     protected $guarded= ['id'];
-    public $timestamp=false;
+    public $timestamps=false;
+    protected $fillable = array('dog_id','adopter_id','date_adopted');
 
     public function dog()
     {
         return $this->belongsTo('App\Dog');
     }
 
-    public function adopters()
+    public function adopter()
     {
-        return $this->belongsTo('App\Adopters');
+        return $this->hasMany('App\Adopter', 'adopter_id');
     }
 
 

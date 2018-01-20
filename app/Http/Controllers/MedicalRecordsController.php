@@ -21,8 +21,10 @@ class MedicalRecordsController extends Controller
         $medicalrecords = DB::table('medicalrecord')
         ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->paginate(5);
         
+        
         return view('medical.table')
-            ->with('medicalrecords', $medicalrecords);
+            ->with('medicalrecords', $medicalrecords)
+            ;
     }
 
     /**
@@ -74,7 +76,7 @@ class MedicalRecordsController extends Controller
 
         $medicalrecord->save();
 
-        return redirect('/medicalrecord')->with('success', 'Istoric medical creat!');
+        return redirect('/medicalrecords')->with('success', 'Istoric medical creat!');
 
 
     }
@@ -87,14 +89,15 @@ class MedicalRecordsController extends Controller
      */
     public function show($id)
     {
-        $medicalrecords=MedicalRecord::find($id);
+        $medicalrecords=MedicalRecord::with('Dog')->find($id);
+        // $medicalrecords=MedicalRecord::find($id);
         // $medicalrecords = DB::table('medicalrecord')
         // ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->get();
         
         return view('medical.show')
             ->with('medicalrecords', $medicalrecords)
         
-        ;
+        ; 
     }
 
     /**
@@ -136,7 +139,7 @@ class MedicalRecordsController extends Controller
             $medicalrecord->sterilized = $request->input('sterilized');            
             $medicalrecord->save();
 
-            return redirect('/medicalrecord')->with('success', 'Istoric medical salvat!');
+            return redirect('/medicalrecords')->with('success', 'Istoric medical salvat!');
 
     }
 
@@ -149,9 +152,11 @@ class MedicalRecordsController extends Controller
     public function destroy($id)
     {
         $medicalrecord=MedicalRecord::find($id);
-        $medicalrecord->delete();
+        $medicalrecord->delete(); 
 
-        return redirect('/medicalrecord')->with('success', 'Inregistrare Stearsa!');
+        // MedicalRecord::destroy($id);
+
+        return redirect('/medicalrecords')->with('success', 'Inregistrare Stearsa!');
         
     }
 }

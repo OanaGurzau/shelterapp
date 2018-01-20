@@ -5,12 +5,14 @@
       <div class="row text-center">
     <h1>{{$album->name}}</h1>
     </div>
+    @if(Auth::check())
         <a class="btn btn-primary btn-lg" href="/albums">Inapoi la Albume</a>
         <a class="btn btn-info btn-lg pull-right" href="/photos/create/{{$album->id}}">Incarca poze in album</a>
-        <a class="btn btn-info btn-lg pull-right" href="/albums/{{$album->id}}/edit">Editeaza album</a><br><br>
+        <a class="btn btn-info btn-lg pull-right" href="/albums/{{$album->id}}/edit">Editeaza imaginea albumului</a><br><br>
         {!!Form::open(['action' => ['DogsAlbumsController@destroy', $dogs->id], 'method' => 'DELETE', 'onsubmit' => 'return confirm("Sigur stergeti?")' ,'enctype' => 'multipart/form-data'])!!}
-            {{Form::bsSubmit('Delete', ['class'=> 'btn btn-dannger'])}}
+            {{Form::bsSubmit('Sterge Album', ['class'=> 'btn btn-danger pull-right'])}}
         {!! Form::close() !!}
+    @endif
 </div>
 <br><br>
 
@@ -69,16 +71,21 @@
         </dd>
 
 
-      <dt class="col-sm-5 text-primary">Nota:</dt>
+      <dt class="col-sm-5 text-primary pull-left">Nota:</dt>
         <dd class="col-sm-7">
+            <p id="fields" style="display:none">
             @if($dogs!==null)
               {{$dogs->notes}}
             @endif
+            </p>
         </dd>
+
+        <button type="button" id="contact-btn" onClick="toggleFields()">Arata mai mult</button>
+
+       
 
     </dl>
   </div>
-
 <br style="clear:both" /><br>
 
 
@@ -105,7 +112,7 @@
 <h2 class="text-primary"><b>Mai multe poze:</b></h2>
 </div>
 <br><br>
-
+ 
 
   @if(count($album->photos) > 0)   
     <?php
@@ -118,14 +125,23 @@
         @foreach($album->photos as $photo)
           @if($i == $colcount)
              <div class='col-md-4 end'>
+              <div class="wrapper">
                   <img class="img-thumbnail" src="/storage/photos/{{$photo->dog_album_id}}/{{$photo->photo}}" alt="{{$photo->title}}">
-                </a>
+                  <div class="overlay">
+                      <a href="/photos/destroy/{{$photo->dog_album_id}}/{{$photo->id}}" class="btn btn-danger btn-xs">Delete image</a>
+                  </div> 
+              </div>
+            
                <br>
                <h4>{{$photo->title}}</h4>
           @else
             <div class='col-md-4 columns'>
-                  <img class="img-thumbnail" src="/storage/photos/{{$photo->dog_album_id}}/{{$photo->photo}}" alt="{{$photo->title}}">
-                </a>
+              <div class="wrapper">
+                <img class="img-thumbnail" src="/storage/photos/{{$photo->dog_album_id}}/{{$photo->photo}}" alt="{{$photo->title}}"> 
+                  <div class="overlay">
+                    <a href="/photos/destroy/{{$photo->dog_album_id}}/{{$photo->id}}" class="btn btn-danger btn-xs">Delete image</a>
+                  </div>
+                </div>
                <br>
                <h4>{{$photo->title}}</h4>
           @endif
@@ -147,7 +163,6 @@
 
 
   {{--  Animal detail ends  --}}
-
 
 
 

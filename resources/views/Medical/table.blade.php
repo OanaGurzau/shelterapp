@@ -6,7 +6,7 @@
         <div class="col-md-10 col-md-offset-1">
                 <h4>Total inregistrari: {{$medicalrecords->total()}} </h4> 
             <div class="panel panel-default">
-                <div class="panel-heading">Istoric Medical<a href="/medicalrecord/create" class="pull-right btn btn-success btn-xs">Adauga inregistrare</a></div>
+                <div class="panel-heading">Istoric Medical<a href="/medicalrecords/create" class="pull-right btn btn-success btn-xs">Adauga inregistrare</a></div>
                     <table class="table text-center">
                         <tr>
                             <td>Nume Caine</td>
@@ -30,13 +30,18 @@
         <td>{{\Carbon\Carbon::parse($medicalrecord->next_deworming_date)->format('d.m.Y')}}</td>
         <td>{{$medicalrecord->sterilized ===0? 'Nu' :'Da'}}</td>
 
-        <td><a class="pull-right btn btn-info" href="medicalrecord/{{$medicalrecord->id}}/show">SHOW</a></td>
-        <td><a class="pull-right btn btn-warning" href="medicalrecord/{{$medicalrecord->id}}/edit">EDIT</a></td>
+        <td><a class="pull-right btn btn-info" href="medicalrecords/{{$medicalrecord->medicalrecords->id}}/show">SHOW</a></td>
+        <td><a class="pull-right btn btn-warning" href="medicalrecords/{{$medicalrecord->id}}/edit">EDIT</a></td>
         <td>
-        {!!Form::open(['action' => ['MedicalRecordsController@destroy', $medicalrecord->id], 'method' => 'POST', 'onsubmit' => 'return confirm("Stergi inregistrarea?")'])!!}
+        {{--  {!!Form::open(['action' => ['MedicalRecordsController@destroy', $medicalrecord->id], 'method' => 'POST', 'onsubmit' => 'return confirm("Stergi inregistrarea?")'])!!}
             {{Form::hidden('_method', 'DELETE')}}
             {{Form::bsSubmit('Delete', ['class'=> 'btn btn-danger'])}}
-        {!! Form::close() !!}
+        {!! Form::close() !!}  --}}
+
+        {{ Form::open(['method' => 'DELETE', 'route' => ['medicalrecords.destroy', $medicalrecord->id]]) }}
+        {{ Form::submit('Delete', ['class' => 'btn btn-danger']) }}
+    {{ Form::close() }}    
+
         </td>
     </tr>
 @endforeach

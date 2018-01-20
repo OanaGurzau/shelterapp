@@ -8,7 +8,7 @@
             <div class="panel-heading">Editeaza un animal</div>
 
 <div class="panel-body">
-        {!!Form::open(['action' => ['DogsController@update', $dog->id], 'method' => 'PATCH')!!}
+        {!!Form::open(['action' => ['DogsController@update', $dog->id], 'method' => 'PATCH'])!!}
                 {{Form::bsText('name',$dog->name, ['placeholder' => 'Nume'])}}
                 {{Form::bsText('breed',$dog->breed,['placeholder' => 'Rasa'])}}
                 {{Form::bsText('color',$dog->color,['placeholder' => 'Culoare'])}}
@@ -21,7 +21,16 @@
                 {{Form::label('birthdate', 'Zi nastere')}}
                 {{Form::date('birthdate', $dog->birthdate, [\Carbon\Carbon::now()])}}
                 <br><br>
-                <br>
+                {{Form::label('join_shelter_date', 'Prima zi in adapost')}}
+                {{Form::date('join_shelter_date',  $background->join_shelter_date, [\Carbon\Carbon::now()])}}
+                <br><br>
+                {{Form::label('adopted', 'Adoptat')}}
+                {{Form::select('adopted', array('0' => 'Nu', '1' => 'Da'))}}
+                <br><br>
+                {{--  {{Form::select('dog_id', $adopterView, null, ['class' => 'form-control', 'id' => 'id', 'placeholder' => 'Alege un adoptator'])}}  --}}
+                {{Form::select('dog_id', $adopterView, null, ['class' => 'form-control', 'id' => 'id', 'placeholder' => 'Alege un adoptator'])}}
+                
+<br>
                 {{Form::bsSubmit('Submit', ['class'=> 'btn btn-primary'])}}
               {!! Form::close() !!}
 </div>

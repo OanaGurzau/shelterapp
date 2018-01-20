@@ -13,7 +13,6 @@ class AdoptedController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public $timestamps = false;
     public function index()
     {
         //

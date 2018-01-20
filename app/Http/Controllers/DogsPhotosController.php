@@ -48,4 +48,10 @@ class DogsPhotosController extends Controller
     
     
     }
+
+    public function destroy($albumId, $photoId)
+	{
+		DogPhoto::destroy($photoId);
+		return redirect('/albums/'.$albumId)->with('success', 'Photo deleted');
+	}
 }

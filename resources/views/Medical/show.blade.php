@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="container">
-<h1 class="text-center">Istoric Medical</h1><a href="/medicalrecord" class="pull-right btn btn-primary btn-xs">Inapoi la istoric medical</a>
+<h1 class="text-center">Istoric Medical</h1><a href="/medicalrecords" class="pull-right btn btn-primary btn-xs">Inapoi la istoric medical</a>
 <br>
 
 <ul class="list-inline" style="font-size:20px">

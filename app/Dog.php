@@ -18,7 +18,7 @@ class Dog extends Model
     }
         
     public function medicalRecord() {
-        return $this->hasMany('App\MedicalRecord');
+        return $this->hasOne('App\MedicalRecord');
     }
     
     public function adopted() {

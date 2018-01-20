@@ -7,7 +7,6 @@
       <h3>Total albume: {{$albums->total()}}</h3>
       <br>
     </div>
-    <a class="btn btn-info btn-lg pull-right" href="/albums/create/">Creaza un album</a>
 
     
 </div>

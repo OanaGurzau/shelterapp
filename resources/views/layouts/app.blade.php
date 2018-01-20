@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+{{--  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">  --}}
 
      
 
@@ -14,7 +14,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Shelter App') }}</title>
-   {{--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.css">  --}}
 
 
 
@@ -47,8 +46,10 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{ '/albums' }}">Albume caini</a></li>
                         <li><a href="{{ '/dogs' }}">Caini</a></li>
-                        <li><a href="{{ '/medicalrecord' }}">Istoric Medical</a></li>
+                        @if (Auth::check())
+                        <li><a href="{{ '/medicalrecords' }}">Istoric Medical</a></li>
                         <li><a href="{{ '/adopter' }}">Adoptatori</a></li>
+                        @endif
                         
                         
                         &nbsp;
@@ -91,7 +92,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-
+    <script src="{{ asset('js/custom.js') }}"></script>
+    
 
 </body>
 </html>
