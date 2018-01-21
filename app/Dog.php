@@ -14,7 +14,7 @@ class Dog extends Model
     
 
     public function background() {
-        return $this->hasOne('App\Background');
+        return $this->hasMany('App\Background');
     }
         
     public function medicalRecord() {
@@ -27,6 +27,10 @@ class Dog extends Model
 
     public function dogAlbum() {
         return $this->hasOne('App\DogAlbum');
+    }
+
+    public function message(){
+        return $this->hasMany('App\Message');
     }
     
     

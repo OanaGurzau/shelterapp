@@ -32,10 +32,15 @@ Route::delete('/dogs/{dog}', 'DogsController@destroy')->middleware('auth');
 // Route::get('/dogs/{id}/edit', 'DogsController@edit')->middleware('auth');
 // Route::delete('/dogs/{id}', 'DogsController@destroy')->middleware('auth');
 
+Route::get('/albums/create', 'DogsAlbumsController@create');
+
+Route::get('/contact', 'MessagesController@index');
+Route::post('/contact/submit', 'MessagesController@submit');
+Route::get('/messages', 'MessagesController@getMessages');
+Route::delete('/messages/{message}', 'MessagesController@destroy');
 
 
 Route::get('/albums', 'DogsAlbumsController@index');
-// Route::get('/albums/create', 'DogsAlbumsController@create');
 Route::post('/albums/store', 'DogsAlbumsController@store');
 Route::get('/albums/{id}', 'DogsAlbumsController@show');
 
@@ -67,5 +72,6 @@ Route::resource('background', 'BackgroundController');
 Route::resource('medicalrecords', 'MedicalRecordsController');
 Route::resource('adopter', 'AdoptersController');
 Route::resource('albums', 'DogsAlbumsController');
+
 
 

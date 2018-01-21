@@ -15,17 +15,27 @@ class MedicalRecordsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        // $medicalrecords=MedicalRecord::all();
-        $medicalrecords = DB::table('medicalrecord')
-        ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->paginate(5);
-        
+        $medicalrecords = MedicalRecord::with('Dog')->paginate(5);
         
         return view('medical.table')
             ->with('medicalrecords', $medicalrecords)
             ;
     }
+
+    // public function index()
+    // {
+    //     // $medicalrecords=MedicalRecord::all();
+    //     $medicalrecords = DB::table('medicalrecord')
+    //     ->join('dogs', 'medicalrecord.dog_id', '=', 'dogs.id')->paginate(5);
+        
+        
+    //     return view('medical.table')
+    //         ->with('medicalrecords', $medicalrecords)
+    //         ;
+    // }
 
     /**
      * Show the form for creating a new resource.

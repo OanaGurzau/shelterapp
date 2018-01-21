@@ -16,24 +16,24 @@
       $colcount = count($albums);
   	  $i = 1;
     ?>
-     <div class="album text-muted">
+     {{--  <div class="album text-muted">  --}}
         <div class="container">
       <div class="row text-center">
         @foreach($albums as $album)
           @if($i == $colcount)
-             <div class='col-md-4 end'>
+             <div class='col-md-4' style="align-items: end">
                <a href="/albums/{{$album->id}}">
                   <img class="img-thumbnail" src="/storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
                 </a>
+               <h4>{{$album->dog->name}}</h4>
                <br>
-               <h4>{{$album->name}}</h4>
           @else
-            <div class='col-md-4 end'>
+            <div class='col-md-4'>
               <a href="/albums/{{$album->id}}">
                 <img class="img-thumbnail" src="/storage/album_covers/{{$album->cover_image}}" alt="{{$album->name}}">
               </a>
+              <h4>{{$album->dog->name}}</h4>
               <br>
-              <h4>{{$album->name}}</h4>
           @endif
         	@if($i % 3 == 0)
           </div></div><div class="row text-center">
@@ -44,14 +44,15 @@
         @endforeach
         
       </div>
+    {{--  </div>  --}}
     </div>
-    </div>
+    
   @else
     <div class="container">
       <p>No Albums To Display</p>
     </div>
   @endif
-  <div class="row text-center">
+  <div class="text-center">
     {{$albums->links()}}
   </div>
 @endsection

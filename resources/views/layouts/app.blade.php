@@ -50,6 +50,11 @@
                         <li><a href="{{ '/medicalrecords' }}">Istoric Medical</a></li>
                         <li><a href="{{ '/adopter' }}">Adoptatori</a></li>
                         @endif
+                        @if (Auth::check())
+                        <li><a href="{{ '/messages'}}">Mesaje de adoptie</a></li>
+                        @else
+                        <li><a href="{{ '/contact' }}">Contact</a></li>
+                        @endif
                         
                         
                         &nbsp;

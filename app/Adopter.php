@@ -12,7 +12,7 @@ class Adopter extends Model
     public $timestamps=false;
 
     public function adopted() {
-        return $this->belongsTo('App\Adopted', 'id');
+        return $this->hasMany('App\Adopted', 'id');
     }
 
     

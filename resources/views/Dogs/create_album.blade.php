@@ -2,7 +2,7 @@
 
 @section ('content') 
 
-<div> 
+<div>  
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">Adauga poza de album la un caine</div>

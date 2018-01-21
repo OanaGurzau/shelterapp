@@ -13,13 +13,12 @@ class Adopted extends Model
 
     public function dog()
     {
-        return $this->belongsTo('App\Dog');
+        return $this->belongsTo('App\Dog', 'dog_id');
     }
 
     public function adopter()
     {
-        return $this->hasMany('App\Adopter', 'adopter_id');
+        return $this->hasMany('App\Adopter', 'adopter_id'); //hasone
     }
-
 
 }

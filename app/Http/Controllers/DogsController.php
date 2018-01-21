@@ -23,13 +23,36 @@ class DogsController extends Controller
      */
     public function index()
     {
+        $dogs = Dog::with(['background' => function($query)
+        {
+            $query->orderBy('id', 'desc');
+        }
+        ])->paginate(5);
 
-        // $dogs=Dog::with('Background')->get();
+        // $dogs = DB::table('dogs')
+        // ->join('background', 'dogs.id', '=', 'background.dog_id')
+        // ->groupBy('dogs.id')
+        // ->orderBy('dogs.id')
+        // ->orderByDesc('background.join_shelter_date')->paginate(5);
+
+        // $medicalrecords = MedicalRecord::with('Dog')->paginate(5);
+        // $dogs=Dog::with('Background')->paginate(5);
+        // $dogs->paginate(5);
+        // $links = $dogs->links();
+        // $dogs=Dog::sortByDesc('backgrounds.join_shelter_date');
+        // $links = $child->appends(['sortby' => $sortby, 'order' => $order])->links();
+        // $dogs = $dogs->sortByDesc('backgrounds.join_shelter_date');
+
+
+
+        //->orderBy('background.join_shelter_date', 'desc')
+
+
         // $dogs=Dog::paginate(5);
         
         
-        $dogs = DB::table('dogs')
-        ->join('background', 'dogs.id', '=', 'background.dog_id')->paginate(5);
+        // $dogs = DB::table('dogs')
+        // ->join('background', 'dogs.id', '=', 'background.dog_id')->paginate(5);
         // ->join('adopted', 'dogs.id', '=', 'adopted.dog_id')->paginate(5);
         
 
@@ -180,37 +203,35 @@ class DogsController extends Controller
      */
     public function edit($id)
     {
-        $dog=Dog::find($id);
-        $background=Background::with('Dog')->find($id);
-        $medicalrecord=MedicalRecord::with('Dog')->find($id);
-        // $adopted=Adopted::with('Dog')->find($id);
-        $adopter = Adopter::pluck('name', 'id');
-        // $adopted = DB::table('adopted')
-        // ->join('dogs', 'adopted.dog_id', '=', 'dogs.id')
-        // ->join('adopter', 'adopted.adopter_id', '=', 'adopters.id')
+        $dog=Dog::with(['background' => function($query) 
+        {
+            $query->orderBy('id', 'desc');
+        }, 
+        'medicalrecord'])->find($id);
 
-        // $dogs = DB::table('dogs')
-        // ->join('background', 'dogs.id', '=', 'background.dog_id')->paginate(5)
-
-
-        $adopted= Adopted::with('Adopter')->find($id);
-
-        // $adopted = Adopted::pluck('id', 'dog_id');
+        $timesAdopted = Dog::join('adopted', 'adopted.dog_id', '=', 'dogs.id')
+                            ->where('dogs.id', '=', $id)
+                            ->orderBy('adopted.id', 'desc')
+                            ->get(['adopted.id', 'adopted.adopter_id']);
+        $background=$dog->background;
+        $medicalrecord=$dog->medicalrecord;
+        $currentAdopterId = null;
+        if($timesAdopted !== null && count($timesAdopted) > 0)
+        {
+            $currentAdopterId = Adopter::find($timesAdopted[0]->adopter_id)->id;  //curentadopterid e un nr
+        }
         
-
-
-        //Table::select('name','surname')->where('id', 1)->get();
-        
+        $adopters = Adopter::pluck('name', 'id');
 
         return view('dogs.edit')->with('dog', $dog)
                                 ->with('background', $background)
                                 ->with('medicalrecord', $medicalrecord)
-                                ->with('adopterView', $adopter)
-
-                                ->with('adopted', $adopted);
+                                ->with('adopterView', $adopters)
+                                ->with('currentAdopter', $currentAdopterId);
+    }
                                 
         
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -247,7 +268,7 @@ class DogsController extends Controller
 
         //Update dogs Background
 
-        $background =Background::find($id);
+        $background =new Background;
         $background->join_shelter_date = $request->input('join_shelter_date');
         $background->dog_id = $dogs->id;        
         $background->save();
@@ -276,8 +297,7 @@ class DogsController extends Controller
 
         $adopted=new Adopted;
         $adopted->dog_id=$dogs->id;
-        // $adopted->adopter_id->adopter->id;
-        // $adopted->adopter_id=$request->input('id');
+        $adopted->adopter_id=$request->input('adopter_id');
         $adopted->date_adopted=$request->input('date_adopted');
         $adopted->save();
 

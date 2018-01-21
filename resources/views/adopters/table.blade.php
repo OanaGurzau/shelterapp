@@ -10,15 +10,15 @@
                 <div class="panel-heading">Adoptatori<a href="/adopter/create" class="pull-right btn btn-success btn-xs">Adauga adoptator</a></div>
                     <table class="table text-center">
                         <tr>
-                            <td>ID</td>
-                            <td>Nume complet</td>
-                            <td>Adresa</td>
-                            <td>Judet</td>
-                            <td>Oras</td></td>
-                            <td>Nr Tel</td>
-                            <td>Email</td>
-                            <td>Ultima vizita la domiciliu</td>
-                            <td>Informatii</td>
+                            <td style="font-weight:bold">ID</td>
+                            <td style="font-weight:bold">Nume complet</td>
+                            <td style="font-weight:bold">Adresa</td>
+                            <td style="font-weight:bold">Judet</td>
+                            <td style="font-weight:bold">Oras</td></td>
+                            <td style="font-weight:bold">Nr Tel</td>
+                            <td style="font-weight:bold">Email</td>
+                            <td style="font-weight:bold">Ultima vizita la domiciliu</td>
+                            <td style="font-weight:bold">Informatii</td>
                             <td></td>
                             <td></td>
                         </tr>

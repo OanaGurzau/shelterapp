@@ -16,20 +16,18 @@
                 {{Form::bsTextArea('description',$dog->description,['placeholder' => 'Descriere album'])}}
                 {{Form::bsText('notes',$dog->notes,['placeholder' => 'Informatii Extra'])}}
                 {{Form::label('sex', 'Alege sexul')}}
-                {{Form::select('sex', array('M' => 'Male', 'F' => 'Female'))}}
+                {{Form::select('sex', array('M' => 'Male', 'F' => 'Female'), $dog->sex)}}
                 <br><br>
                 {{Form::label('birthdate', 'Zi nastere')}}
-                {{Form::date('birthdate', $dog->birthdate, [\Carbon\Carbon::now()])}}
+                {{Form::date('birthdate', $dog->birthdate, [\Carbon\Carbon::now()->format('Y-m-d')])}}
                 <br><br>
                 {{Form::label('join_shelter_date', 'Prima zi in adapost')}}
-                {{Form::date('join_shelter_date',  $background->join_shelter_date, [\Carbon\Carbon::now()])}}
+                {{Form::date('join_shelter_date',  $background[0]->join_shelter_date, [\Carbon\Carbon::now()])}}
                 <br><br>
                 {{Form::label('adopted', 'Adoptat')}}
-                {{Form::select('adopted', array('0' => 'Nu', '1' => 'Da'))}}
+                {{Form::select('adopted',array('0' => 'Nu', '1' => 'Da'))}}
                 <br><br>
-                {{--  {{Form::select('dog_id', $adopterView, null, ['class' => 'form-control', 'id' => 'id', 'placeholder' => 'Alege un adoptator'])}}  --}}
-                {{Form::select('dog_id', $adopterView, null, ['class' => 'form-control', 'id' => 'id', 'placeholder' => 'Alege un adoptator'])}}
-                
+                {{Form::select('adopter_id', $adopterView, $currentAdopter, ['class' => 'form-control', 'id' => 'id', 'placeholder' => 'Alege un adoptator'])}}                
 <br>
                 {{Form::bsSubmit('Submit', ['class'=> 'btn btn-primary'])}}
               {!! Form::close() !!}

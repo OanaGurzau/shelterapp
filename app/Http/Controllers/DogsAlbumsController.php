@@ -16,8 +16,7 @@ class DogsAlbumsController extends Controller
     public $timestamps = false;
 
     public function index(){
-        $albums=DogAlbum::with('Photos')->get();
-        $albums=DogAlbum::paginate(9);
+        $albums=DogAlbum::with('Photos')->paginate(9);
         return view('dogs.list_album')->with('albums', $albums);
     }
 
@@ -29,13 +28,13 @@ class DogsAlbumsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            // 'name' => 'required',
             'cover_image' => 'sometimes|image|max:1999',
-            'breed' => 'required',
-            'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
-            'microchip' => 'digits:15', //digits also verify if numeric
-            'description'=> 'required',
-            'notes'=>'nullable',
+            // 'breed' => 'required',
+            // 'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
+            // 'microchip' => 'digits:15', //digits also verify if numeric
+            // 'description'=> 'required',
+            // 'notes'=>'nullable',
         ]);
 
             // aici // //Get the filename with the extension
@@ -110,6 +109,7 @@ class DogsAlbumsController extends Controller
         // //Add new cover image
 
         //get filename with extension
+        
         $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
         
         //get just the filename
@@ -137,7 +137,6 @@ class DogsAlbumsController extends Controller
  
         
         //Dogs Background
-
         $background = new Background;
         $background->join_shelter_date = $request->input('join_shelter_date');
         $background->dog_id = $dogs->id;
@@ -154,10 +153,16 @@ class DogsAlbumsController extends Controller
  
 
     public function show($id){
+
         $album=DogAlbum::with('Photos')->find($id);
-        $dogs=Dog::with('DogAlbum')->find($id);
-        $background=Background::With('Dog')->find($id);
-        $medicalrecord=MedicalRecord::With('Dog')->find($id);
+        $dogs=$album->dog;
+        $background=Background::With('Dog')->find($dogs->id);
+        $medicalrecord=MedicalRecord::With('Dog')->find($dogs->id);
+
+        // $album=DogAlbum::with('Photos')->find($id);
+        // $dogs=Dog::with('DogAlbum')->find($id);
+        // $background=Background::With('Dog')->find($id);
+        // $medicalrecord=MedicalRecord::With('Dog')->find($id);
         
 
         return view('dogs.show_album')
@@ -171,24 +176,25 @@ class DogsAlbumsController extends Controller
     public function edit($id){
         $album=DogAlbum::find($id);
         $dogs=Dog::with('DogAlbum')->find($id);
-        $background=Background::with('Dog')->find($id);
-        $medicalrecord=MedicalRecord::with('Dog')->find($id);
+        // $background=Background::with('Dog')->find($id);
+        // $medicalrecord=MedicalRecord::with('Dog')->find($id);
         return view('dogs.edit_album')->with('album', $album)
                                     ->with('dogs', $dogs)
-                                    ->with('background', $background)
-                                    ->with('medicalrecord', $medicalrecord);
+                                    // ->with('background', $background)
+                                    // ->with('medicalrecord', $medicalrecord)
+                                    ;
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
+            // 'name' => 'required',
             'cover_image' => 'sometimes|image|max:1999',
-            'breed' => 'required',
-            'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
-            'microchip' => 'digits:15', //digits also verify if numeric
-            'description'=> 'required',
-            'notes'=>'nullable',
+            // 'breed' => 'required',
+            // 'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
+            // 'microchip' => 'digits:15', //digits also verify if numeric
+            // 'description'=> 'required',
+            // 'notes'=>'nullable',
         ]); 
 
  
@@ -260,10 +266,13 @@ class DogsAlbumsController extends Controller
     public function destroy($id){
         $dogs=Dog::find($id);
         $album=DogAlbum::find($id);
-        $background=Background::find($id);
-        $medicalrecord=MedicalRecord::find($id);
+        // $background=Background::find($id);
+        // $medicalrecord=MedicalRecord::find($id);
+
+        // DogAlbum::destroy($id);
         
-        $dogs->delete();
+        
+        $album->delete();
 
         return redirect('/albums')->with('success', 'Album sters');
         
