@@ -8,7 +8,7 @@
             <div class="panel-heading">Editeaza imaginea albumului</div>
 
 <div class="panel-body">
-        {!!Form::open(['action' => ['DogsAlbumsController@update', $dogs->id], 'method' => 'PATCH', 'enctype' => 'multipart/form-data'])!!}
+        {!!Form::open(['action' => ['DogsAlbumsController@update', $album->id], 'method' => 'PATCH', 'enctype' => 'multipart/form-data'])!!}
                 {{--  {{Form::bsText('name',$dogs->name, ['placeholder' => 'Nume album'])}}
                 {{Form::bsText('breed',$dogs->breed,['placeholder' => 'Rasa'])}}
                 {{Form::bsText('color',$dogs->color,['placeholder' => 'Culoare'])}}

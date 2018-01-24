@@ -28,34 +28,6 @@ class DogsController extends Controller
             $query->orderBy('id', 'desc');
         }
         ])->paginate(5);
-
-        // $dogs = DB::table('dogs')
-        // ->join('background', 'dogs.id', '=', 'background.dog_id')
-        // ->groupBy('dogs.id')
-        // ->orderBy('dogs.id')
-        // ->orderByDesc('background.join_shelter_date')->paginate(5);
-
-        // $medicalrecords = MedicalRecord::with('Dog')->paginate(5);
-        // $dogs=Dog::with('Background')->paginate(5);
-        // $dogs->paginate(5);
-        // $links = $dogs->links();
-        // $dogs=Dog::sortByDesc('backgrounds.join_shelter_date');
-        // $links = $child->appends(['sortby' => $sortby, 'order' => $order])->links();
-        // $dogs = $dogs->sortByDesc('backgrounds.join_shelter_date');
-
-
-
-        //->orderBy('background.join_shelter_date', 'desc')
-
-
-        // $dogs=Dog::paginate(5);
-        
-        
-        // $dogs = DB::table('dogs')
-        // ->join('background', 'dogs.id', '=', 'background.dog_id')->paginate(5);
-        // ->join('adopted', 'dogs.id', '=', 'adopted.dog_id')->paginate(5);
-        
-
         
         return view('dogs.table')->with('dogs', $dogs);
     }

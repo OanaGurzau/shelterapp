@@ -9,7 +9,7 @@
         <a class="btn btn-primary btn-lg" href="/albums">Inapoi la Albume</a>
         <a class="btn btn-info btn-lg pull-right" href="/photos/create/{{$album->id}}">Incarca poze in album</a>
         <a class="btn btn-info btn-lg pull-right" href="/albums/{{$album->id}}/edit">Editeaza imaginea albumului</a><br><br>
-        {!!Form::open(['action' => ['DogsAlbumsController@destroy', $dogs->id], 'method' => 'DELETE', 'onsubmit' => 'return confirm("Sigur stergeti?")' ,'enctype' => 'multipart/form-data'])!!}
+        {!!Form::open(['action' => ['DogsAlbumsController@destroy', $album->id], 'method' => 'DELETE', 'onsubmit' => 'return confirm("Sigur stergeti?")' ,'enctype' => 'multipart/form-data'])!!}
             {{Form::bsSubmit('Sterge Album', ['class'=> 'btn btn-danger pull-right'])}}
         {!! Form::close() !!}
     @endif

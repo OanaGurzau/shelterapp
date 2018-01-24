@@ -20,7 +20,7 @@
                                 {{Form::select('sex', array('M' => 'Male', 'F' => 'Female'))}}
                                 <br><br>
                                 {{Form::label('birthdate', 'Zi nastere')}}
-                                {{Form::date('birthdate', \Carbon\Carbon::now())}}
+                                {{Form::date('birthdate', \Carbon\Carbon::now()->format('Y-m-d'))}}
                                 <br><br>
                                 {{Form::label('join_shelter_date', 'Prima zi in adapost')}}
                                 {{Form::date('join_shelter_date', \Carbon\Carbon::now())}}

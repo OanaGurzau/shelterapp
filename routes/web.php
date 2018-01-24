@@ -58,7 +58,7 @@ Route::get('/adopter/{adopter}/edit', 'AdoptersController@edit');
 
 
 
-// Route::get('/photos/create/{id}', 'DogsPhotosController@create');
+Route::get('/photos/create/{id}', 'DogsPhotosController@create');
 Route::post('/photos/store', 'DogsPhotosController@store');
 Route::get('/photos/destroy/{album_id}/{id}', 'DogsPhotosController@destroy')->middleware('auth');
 

@@ -9,7 +9,8 @@ class Message extends Model
     protected $table='messages';
     protected $guarded= ['id'];   
     public $timestamps = false;    
+    
     public function dog() {
-        return $this->HasMany('App\Dog', 'dog_id');
+        return $this->belongsTo('App\Dog', 'dog_id');
     }
 }

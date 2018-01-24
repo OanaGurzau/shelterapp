@@ -9,6 +9,11 @@ use App\DogAlbum;
 
 class MessagesController extends Controller
 {
+    // public function __construct()
+	// {
+	// 	$this->middleware('auth');
+	// }
+
     public function index(){
         $albumView = DogAlbum::pluck('name', 'dog_id');
         return view('pages.contact')->with('albumView', $albumView);
@@ -29,7 +34,7 @@ class MessagesController extends Controller
         $messages->email = $request->input('email');
         $messages->phone = $request->input('phone');
         $messages->message = $request->input('message');
-        $messages->dog_id=$request->input('dog_id');
+        $messages->dog_id = $request->input('dog_id');
 
         // Save Message
         $messages->save();
@@ -39,7 +44,7 @@ class MessagesController extends Controller
     }
 
     public function getMessages(){
-        $messages = Message::paginate(5);
+        $messages = Message::with('dog')->paginate(5);
   
         return view('pages.messages')->with('messages', $messages);
       }

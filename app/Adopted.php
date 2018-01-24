@@ -18,7 +18,7 @@ class Adopted extends Model
 
     public function adopter()
     {
-        return $this->hasMany('App\Adopter', 'adopter_id'); //hasone
+        return $this->belongsTo('App\Adopter', 'adopter_id'); 
     }
 
 }
