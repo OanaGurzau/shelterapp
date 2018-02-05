@@ -25,9 +25,6 @@
                                 {{Form::label('join_shelter_date', 'Prima zi in adapost')}}
                                 {{Form::date('join_shelter_date', \Carbon\Carbon::now())}}
                                 <br><br>
-                                {{Form::label('adopted', 'Adoptat')}}
-                                {{Form::select('adopted', array('0' => 'Nu', '1' => 'Da'))}}
-                                <br><br>
                                 {{Form::label('cover_image', 'Imagine album')}}
                                 {{Form::bsfile('cover_image')}}
                                 <br><br>

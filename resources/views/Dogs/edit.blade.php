@@ -25,8 +25,7 @@
                 {{Form::date('join_shelter_date',  $background[0]->join_shelter_date, [\Carbon\Carbon::now()])}}
                 <br><br>
                 {{Form::label('adopted', 'Adoptat')}}
-                {{Form::select('adopted',array('0' => 'Nu', '1' => 'Da'))}}
-                <br><br>
+                {{Form::select('adopted',array('0' => 'Nu', '1' => 'Da'), $dog->adopted)}}                <br><br>
                 {{Form::select('adopter_id', $adopterView, $currentAdopter, ['class' => 'form-control', 'id' => 'id', 'placeholder' => 'Alege un adoptator'])}}                
 <br>
                 {{Form::bsSubmit('Submit', ['class'=> 'btn btn-primary'])}}

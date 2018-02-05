@@ -9,7 +9,7 @@ class Adopted extends Model
     protected $table = 'adopted';
     protected $guarded= ['id'];
     public $timestamps=false;
-    protected $fillable = array('dog_id','adopter_id','date_adopted');
+    protected $fillable = array('dog_id','adopter_id');
 
     public function dog()
     {

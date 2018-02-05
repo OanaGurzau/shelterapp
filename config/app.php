@@ -164,6 +164,9 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 
+        App\Providers\RouteServiceProvider::class,
+        Laravel\Dusk\DuskServiceProvider::class,
+
         /*
          * Package Service Providers...
          */

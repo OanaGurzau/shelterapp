@@ -32,10 +32,6 @@
         <td><a class="pull-right btn btn-info" href="medicalrecords/{{$medicalrecord->id}}/show">SHOW</a></td>
         <td><a class="pull-right btn btn-warning" href="medicalrecords/{{$medicalrecord->id}}/edit">EDIT</a></td>
         <td>
-        {{--  {!!Form::open(['action' => ['MedicalRecordsController@destroy', $medicalrecord->id], 'method' => 'POST', 'onsubmit' => 'return confirm("Stergi inregistrarea?")'])!!}
-            {{Form::hidden('_method', 'DELETE')}}
-            {{Form::bsSubmit('Delete', ['class'=> 'btn btn-danger'])}}
-        {!! Form::close() !!}  --}}
 
         {{ Form::open(['method' => 'DELETE', 'route' => ['medicalrecords.destroy', $medicalrecord->id]]) }}
         {{ Form::submit('Delete', ['class' => 'btn btn-danger']) }}

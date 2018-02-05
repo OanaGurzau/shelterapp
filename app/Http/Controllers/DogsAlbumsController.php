@@ -15,8 +15,28 @@ class DogsAlbumsController extends Controller
 {
     public $timestamps = false;
 
-    public function index(){
-        $albums=DogAlbum::with('Photos', 'Dog')->paginate(9);
+    public function index(Request $request){
+        if($request->has('adoptat'))
+        {
+            if($request->input('adoptat') === 'adoptat')
+            {
+                $albums = DogAlbum::with(['dog'])->whereHas('dog', function($query){
+                    $query->where('adopted', '=', '1');
+                })->paginate(9)->appends('adoptat', $request->input('adoptat'));
+                // select * from dog_albums inner join dogs on dog_albums.dog_id = dogs.id where dogs.adoptat = 1
+            }
+            else
+            {
+                $albums = DogAlbum::with(['dog'])->whereHas('dog', function($query){
+                    $query->where('adopted', '=', '0');
+                })->paginate(9)->appends('adoptat', $request->input('adoptat'));
+            }
+        }
+        else
+        {
+            $albums = DogAlbum::with('Dog')->paginate(9);
+        }
+        
         return view('dogs.list_album')->with('albums', $albums);
     }
 
@@ -24,114 +44,37 @@ class DogsAlbumsController extends Controller
         $dogs = Dog::whereNotIn('id', function($query) {
             $query->select('dog_id')->from('dog_albums');
         })->pluck('name', 'id');
-        //$albums = DogAlbum::pluck('id');
-        //$dogs = Dog::whereNotIn('id', $albums)->pluck('name', 'id');
        return view('dogs.create_album')->with('dogsView', $dogs);
     }
-
-    // public function create(){
-    //     DB::table("dogs")->select('*')->whereNotIn('id',function($query) {
-            
-    //            $query->select('dog_id')->from('dog_albums');
-            
-    //         })->get();
-
-
-
-
-    //     $dogs = Dog::pluck('name', 'id');
-    //    return view('dogs.create_album')->with('dogsView', $dogs);
-    // }
 
     public function store(Request $request)
     {
         $this->validate($request, [
-            // 'name' => 'required',
             'cover_image' => 'sometimes|image|max:1999',
-            // 'breed' => 'required',
-            // 'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
-            // 'microchip' => 'digits:15', //digits also verify if numeric
-            // 'description'=> 'required',
-            // 'notes'=>'nullable',
         ]);
-
-            // aici // //Get the filename with the extension
-            // $filenameWithExt=$request->file('cover_image');
-            // if($filenameWithExt!==null){
-            //     $filenameWithExt->getClientOriginalName();
-         
-            // }
-
-
-
-
-
-
-            
-            
-
-
-        // $filenameWithExt = $request-> file('cover_image')->getClientOriginalName();
-
-
-        //aici
-        //     //Get only the filename
-        // $filename=pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        // //    //Get only the extension of the file
-        //    $extension=$request->file('cover_image');
-        //    if($extension!==null){
-        //        $extension->getClientOriginalExtension();
-        //    }
-
-        // fara $extension = $request->file('cover_image')->getClientOriginalExtension();
-
-          //Create custom filename
-
-        // aici $filenameToStore=$filename.'_'.time().'.'.$extension;
-
-          //Upload image
-// aici
-        //   $path=$request-> file('cover_image');
-        //   if($path !==null){
-        //       $path->storeAs('public/album_covers', $filenameToStore);
-        //   }
-
-        // fara $path= $request-> file('cover_image')->storeAs('public/album_covers', $filenameToStore);
-
-
-       
-
 
         // Create Album
         $album=new DogAlbum;
         $album->name = $request->input('name');
         $album->dog_id = $request->input('dog_id');
 
-
-       
-
-
-        // //Add new cover image
-
-        //get filename with extension
+         //Adding an image for the album cover
+        //get entire name of the image with the extension
+        $entireImageName = $request->file('cover_image')->getClientOriginalName();
         
-        $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
-        
-        //get just the filename
-        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //get only the image name
+        $imageName = pathinfo($entireImageName, PATHINFO_FILENAME);
 
-        //get extension
+        //get only image extension
         $extension=$request->file('cover_image')->getClientOriginalExtension();
 
-        //create new file name
-        
-        $filenameToStore=$filename.'_'.time().'.'.$extension;
+        //create new name for the image file
+        $newImageName=$imageName.'_'.time().'.'.$extension;
 
-        //Upload Image
+        //save the new image
+        $path=$request->file('cover_image')->storeAs('public/album_covers', $newImageName); 
 
-        $path=$request->file('cover_image')->storeAs('public/album_covers', $filenameToStore); 
-
-        $album->cover_image = $filenameToStore;
+        $album->cover_image = $newImageName;
         $album->save();
 
 
@@ -153,12 +96,6 @@ class DogsAlbumsController extends Controller
         $background=Background::With('Dog')->find($dogs->id);
         $medicalrecord=MedicalRecord::With('Dog')->find($dogs->id);
 
-        // $album=DogAlbum::with('Photos')->find($id);
-        // $dogs=Dog::with('DogAlbum')->find($id);
-        // $background=Background::With('Dog')->find($id);
-        // $medicalrecord=MedicalRecord::With('Dog')->find($id);
-        
-
         return view('dogs.show_album')
                         ->with('album', $album)
                         ->with('dogs', $dogs)
@@ -169,82 +106,48 @@ class DogsAlbumsController extends Controller
 
     public function edit($id){
         $album=DogAlbum::with('dog')->find($id);
-        // $dogs=Dog::with('DogAlbum')->find($id);
-        return view('dogs.edit_album')->with('album', $album)
-                                    // ->with('dogs', $dogs)
-                                    // ->with('background', $background)
-                                    // ->with('medicalrecord', $medicalrecord)
-                                    ;
+        return view('dogs.edit_album')->with('album', $album);
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            // 'name' => 'required',
             'cover_image' => 'sometimes|image|max:1999',
-            // 'breed' => 'required',
-            // 'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
-            // 'microchip' => 'digits:15', //digits also verify if numeric
-            // 'description'=> 'required',
-            // 'notes'=>'nullable',
         ]); 
-
- 
-
-
-
-        // //Create Dog
-
-        // $dogs=Dog::find($id);
-        // $dogs->name = $request->input('name');
-        // $dogs->breed = $request->input('breed');
-        // $dogs->color = $request->input('color');
-        // $dogs->sex = $request->input('sex');
-        // $dogs->microchip = $request->input('microchip');
-        // $dogs->birthdate = $request->input('birthdate');
-        // $dogs->notes = $request->input('notes');
-        // $dogs->description = $request->input('description');
-        // $dogs->save();
-
 
         // Create Album
         $album=DogAlbum::find($id);
-        // $album->name = $request->input('name');
-        // $album->cover_image = $request->input('cover_image');
-        // $album->dog_id = $request-;
 
-        //Update new photo upon editing
+        //Update new album image upon editing
 
         if ($request->hasFile('cover_image')){
-           //get filename with extension
+           //get imagename with extension
         
-                $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
+                $entireImageName = $request->file('cover_image')->getClientOriginalName();
                 
-                //get just the filename
-                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                //get just the imagename
+                $imageName = pathinfo($entireImageName, PATHINFO_FILENAME);
 
                 //get extension
                 $extension=$request->file('cover_image')->getClientOriginalExtension();
 
-                //create new file name
+                //create new  name for the image
                 
-                $filenameToStore=$filename.'_'.time().'.'.$extension;
+                $newImageName=$imageName.'_'.time().'.'.$extension;
 
                 //Upload Image
 
-                $path=$request->file('cover_image')->storeAs('public/album_covers', $filenameToStore);              
+                $path=$request->file('cover_image')->storeAs('public/album_covers', $newImageName);              
            
            
                        
-            $oldFilenameToStore=$album->cover_image;
-                        
+            $oldImageNameToStore=$album->cover_image;
 
-           
             //Update database with new photo
-          $album->cover_image=$filenameToStore;
+          $album->cover_image=$newImageName;
 
             //Delete old photo
-            Storage::delete('public/album_covers/'.$oldFilenameToStore);            
+            Storage::delete('public/album_covers/'.$oldImageNameToStore);            
         }
         
 
@@ -259,16 +162,8 @@ class DogsAlbumsController extends Controller
     }
 
     public function destroy($id){
-        // $dogs=Dog::find($id);
         $album=DogAlbum::with('dog')->find($id);
-        // $background=Background::find($id);
-        // $medicalrecord=MedicalRecord::find($id);
-
-        // DogAlbum::destroy($id);
-        
-        
         $album->delete();
-
         return redirect('/albums')->with('success', 'Album sters');
         
     }

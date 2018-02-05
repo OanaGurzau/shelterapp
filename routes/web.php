@@ -24,35 +24,27 @@ Route::get('/dogs/{dog}/create', 'DogsController@create')->middleware('auth');
 Route::get('/dogs/{dog}/edit', 'DogsController@edit')->middleware('auth');
 Route::delete('/dogs/{dog}', 'DogsController@destroy')->middleware('auth');
 
-
-
-// Route::get('/dogs', 'DogsController@index');
-// Route::get('/dogs/{id}/show', 'DogsController@show');
-// Route::get('/dogs/{id}/create', 'DogsController@create')->middleware('auth');
-// Route::get('/dogs/{id}/edit', 'DogsController@edit')->middleware('auth');
-// Route::delete('/dogs/{id}', 'DogsController@destroy')->middleware('auth');
-
 Route::get('/albums/create', 'DogsAlbumsController@create');
 
 Route::get('/contact', 'MessagesController@index');
 Route::post('/contact/submit', 'MessagesController@submit');
-Route::get('/messages', 'MessagesController@getMessages');
+Route::get('/messages', 'MessagesController@getMessages')->middleware('auth');
 Route::delete('/messages/{message}', 'MessagesController@destroy');
 
 
 Route::get('/albums', 'DogsAlbumsController@index');
-Route::post('/albums/store', 'DogsAlbumsController@store');
+// Route::post('/albums/store', 'DogsAlbumsController@store');
 Route::get('/albums/{id}', 'DogsAlbumsController@show');
 
 Route::get('/medicalrecords', 'MedicalRecordsController@index');
-Route::get('/medicalrecords/{medicalrecord}/show', 'MedicalRecordsController@show');
+// Route::get('/medicalrecords/{medicalrecord}/show', 'MedicalRecordsController@show');
 Route::get('/medicalrecords/{medicalrecord}/edit', 'MedicalRecordsController@edit');
 Route::get('/medicalrecords/create', 'MedicalRecordsController@create');
 Route::delete('/medicalrecords/{medicalrecord}', 'MedicalRecordsController@destroy')->middleware('auth');
 
 
 Route::get('/adopter', 'AdoptersController@index');
-Route::get('/adopter/{adopter}/show', 'AdoptersController@show');
+// Route::get('/adopter/{adopter}/show', 'AdoptersController@show');
 Route::get('/adopter/create', 'AdoptersController@create');
 Route::get('/adopter/{adopter}/edit', 'AdoptersController@edit');
 

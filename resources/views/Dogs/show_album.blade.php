@@ -52,7 +52,7 @@
       <dt class="col-sm-5 text-primary">Zi de nastere:</dt>
         <dd class="col-sm-7">
             @if($dogs!==null)
-              {{$dogs->birthdate->format('d.m.Y')}}
+              {{$dogs->birthdate}}
             @endif
         </dd>
 
@@ -131,8 +131,6 @@
                       <a href="/photos/destroy/{{$photo->dog_album_id}}/{{$photo->id}}" class="btn btn-danger btn-xs">Delete image</a>
                   </div> 
               </div>
-            
-               <br>
                <h4>{{$photo->title}}</h4>
           @else
             <div class='col-md-4 columns'>
@@ -142,7 +140,6 @@
                     <a href="/photos/destroy/{{$photo->dog_album_id}}/{{$photo->id}}" class="btn btn-danger btn-xs">Delete image</a>
                   </div>
                 </div>
-               <br>
                <h4>{{$photo->title}}</h4>
           @endif
         	@if($i % 3 == 0)

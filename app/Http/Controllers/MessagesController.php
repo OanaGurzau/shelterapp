@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 use App\Message;
 use App\Dog;
 use App\DogAlbum;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdoptionMessage;
 
 class MessagesController extends Controller
 {
-    // public function __construct()
-	// {
-	// 	$this->middleware('auth');
-	// }
 
     public function index(){
         $albumView = DogAlbum::pluck('name', 'dog_id');
@@ -39,13 +37,14 @@ class MessagesController extends Controller
         // Save Message
         $messages->save();
 
+        Mail::to('oanagurzau@gmail.com')->send(new AdoptionMessage($messages)); //send ia o instanta a mailable
+
       // Redirect
       return redirect('/contact') ->with('success', 'Message Sent');
     }
 
     public function getMessages(){
         $messages = Message::with('dog')->paginate(5);
-  
         return view('pages.messages')->with('messages', $messages);
       }
     
@@ -59,3 +58,4 @@ class MessagesController extends Controller
     }
 
 }
+ 

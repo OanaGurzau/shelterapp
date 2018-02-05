@@ -18,6 +18,14 @@ return [
 
     'driver' => env('MAIL_DRIVER', 'smtp'),
 
+    'stream' => [
+        'ssl' => [
+            'allow_self_signed' => true,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ],
+    ], //nu face autentificarea certificata
+
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Address

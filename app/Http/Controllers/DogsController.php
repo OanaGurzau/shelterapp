@@ -11,11 +11,11 @@ use App\MedicalRecord;
 use App\Background;
 use App\Adopted;
 use App\Adopter;
+use Validator;
  
 
 class DogsController extends Controller
 {
-    public $timestamps = false;
     /**
      * Display a listing of the resource.
      *
@@ -39,8 +39,7 @@ class DogsController extends Controller
      */
     public function create()
     {
-        $dog = Dog::pluck('name', 'id');
-        return view('dogs.create')->with('dogView', $dog);
+        return view('dogs.create');
     }
 
     /**
@@ -55,7 +54,7 @@ class DogsController extends Controller
             'name' => 'required',
             'breed' => 'required',
             'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
-            'microchip' => 'digits:15', //digits also verify if numeric
+            'microchip' => 'digits:15|unique:dogs,microchip',
             'description'=> 'required',
             'notes'=>'nullable',
             'cover_image' => 'sometimes|image|max:1999',
@@ -73,7 +72,6 @@ class DogsController extends Controller
         $dogs->birthdate = $request->input('birthdate');
         $dogs->notes = $request->input('notes');
         $dogs->description = $request->input('description');
-        $dogs->adopted = $request->input('adopted');
         $dogs->save();
 
         // Create Album
@@ -82,49 +80,36 @@ class DogsController extends Controller
         $album->dog_id = $dogs->id;
         $album->cover_image= $request->input('cover_image');
 
-        // //Add new cover image
+        // //Adding an image for the album cover
 
-        //get filename with extension
-
+        //get entire name of the image with the extension
         if(!empty($request->cover_image)){
-            $filenameWithExt=$request->file('cover_image')->getClientOriginalName();
-          }else{
-            $filenameWithExt = 'storage/inc/default.jpg'; 
-        }
-        // $filenameWithExt=$request->file('cover_image')->getClientOriginalName();
-         
-        //  if(!$filenameWithExt)
-        //  {
-        //     $filenameWithExt = 'storage/inc/default.jpg'; 
-        //  }
-
-        //get just the filename
+            $entireImageName=$request->file('cover_image')->getClientOriginalName();
+            //get only the image name
+            $imageName = pathinfo($entireImageName, PATHINFO_FILENAME);
         
-        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
-        //get extension
-        if(!empty($request->cover_image)){
-            $extension=$request->file('cover_image')->getClientOriginalExtension();
+                //get only image extension
+                if(!empty($request->cover_image)){
+                    $extension=$request->file('cover_image')->getClientOriginalExtension();
+                }
+        
+                //create new name for the image file
+                if($imageName==='default'){
+                    $newImageName=$imageName.'.'.'jpg';
+                }else{
+                $newImageName=$imageName.'_'.time().'.'.$extension;
+                }
+        
+                //save the new image
+        
+                  $path=$request-> file('cover_image');
+                  if($path !==null){
+                     $path->storeAs('public/album_covers', $newImageName);
+                  }
+        
+                $album->cover_image = $newImageName;
+        
         }
-            
-        // $extension=$request->file('cover_image')->getClientOriginalExtension();
-
-
-        //create new file name
-        if($filename==='default'){
-            $filenameToStore=$filename.'.'.'jpg';
-        }else{
-        $filenameToStore=$filename.'_'.time().'.'.$extension;
-        }
-
-        //Upload Image
-
-          $path=$request-> file('cover_image');
-          if($path !==null){
-             $path->storeAs('public/album_covers', $filenameToStore);
-          }
-
-        $album->cover_image = $filenameToStore;
 
 
         $album->save();
@@ -153,18 +138,8 @@ class DogsController extends Controller
      */
     public function show($id)
     {
-        $dog=Dog::find($id);
-        $background=Background::With('Dog')->find($id);
-        
-        
-        // return view('dogs.show')
-        //         ->with('dog', $dog)
-        //         ->with('background', $background);
-
-        // $dog=Dog::find($id);
-        // $background = Background::with('dog')->get();
-        
-        return view('dogs.show', compact('dog', 'background'));    
+        $background=Background::With('Dog')->find($id); 
+        return view('dogs.show')->with('background', $background);  
     }
 
     /**
@@ -173,6 +148,7 @@ class DogsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $dog=Dog::with(['background' => function($query) 
@@ -187,10 +163,11 @@ class DogsController extends Controller
                             ->get(['adopted.id', 'adopted.adopter_id']);
         $background=$dog->background;
         $medicalrecord=$dog->medicalrecord;
+
         $currentAdopterId = null;
         if($timesAdopted !== null && count($timesAdopted) > 0)
         {
-            $currentAdopterId = Adopter::find($timesAdopted[0]->adopter_id)->id;  //curentadopterid e un nr
+            $currentAdopterId = $timesAdopted[0]->adopter_id;
         }
         
         $adopters = Adopter::pluck('name', 'id');
@@ -201,7 +178,7 @@ class DogsController extends Controller
                                 ->with('adopterView', $adopters)
                                 ->with('currentAdopter', $currentAdopterId);
     }
-                                
+                                    
         
     
 
@@ -214,14 +191,25 @@ class DogsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        $v = Validator::make($request->all(), [
             'name' => 'required',
             'breed' => 'required',
             'color' => 'required|regex:/^[a-zA-Z ]+$/', //no number
             'microchip' => 'digits:15', //digits also verify if numeric
-            'description'=> 'required',
-            'notes'=>'nullable',
-        ]); 
+            'description'=> 'required|max:1000',
+            'notes'=>'nullable'
+        ]);
+
+        $v->sometimes('adopter_id', 'required', function($input){
+            return $input->adopted == 1;
+        });
+
+        if ($v->fails()) {
+            return redirect()
+                        ->action('DogsController@edit', ['id' => $id])
+                        ->withErrors($v)
+                        ->withInput();
+        }
 
 
         //Update Dog
@@ -235,8 +223,8 @@ class DogsController extends Controller
         $dogs->birthdate = $request->input('birthdate');
         $dogs->notes = $request->input('notes');
         $dogs->description = $request->input('description');
+        $dogs->adopted=$request->input('adopted');
         $dogs->save();
-
 
         //Update dogs Background
 
@@ -245,35 +233,16 @@ class DogsController extends Controller
         $background->dog_id = $dogs->id;        
         $background->save();
 
-        // //Update adopter
-
-        $adopter=Adopter::find($id);
-        // $adopter->name=$request->input('name');
-        // $adopter->address=$request->input('address');
-        // $adopter->county=$request->input('county');
-        // $adopter->city=$request->input('city');
-        // $adopter->phone_number=$request->input('phone_number');
-        // $adopter->email=$request->input('email');
-        // $adopter->last_home_visit=$request->input('last_home_visit');
-        // $adopter->info=$request->input('info');
-        // $adopter->save();
-        
-        
-        
-        
-        
-        
-
-        
-        //Update adopted
+        //Update adopter
 
         $adopted=new Adopted;
         $adopted->dog_id=$dogs->id;
-        $adopted->adopter_id=$request->input('adopter_id');
-        $adopted->date_adopted=$request->input('date_adopted');
+        if($request->input('adopted') == '1')
+        {
+            $adopted->adopter_id=$request->input('adopter_id');
+        }
+
         $adopted->save();
-
-
         
         return redirect('/dogs')->with('success', 'Inregistrare editata cu success');
         
@@ -287,15 +256,8 @@ class DogsController extends Controller
      */
     public function destroy($id)
     {
-     
-        
-        // $dogs=Dog::find($id);
-        // $background=Background::find($id);
-        // $medicalrecord=MedicalRecord::find($id);
-        // $dogs->delete();
-
-        Dog::destroy($id);
-
+        $dog=Dog::find($id);
+        $dog->delete(); 
         return redirect('/dogs')->with('success', 'Inregistrare stearsa');
         
     }

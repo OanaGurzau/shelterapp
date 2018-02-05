@@ -6,12 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dog extends Model
 {
-    protected $table = 'dogs';
-    protected $guarded= ['id'];
     public $timestamps = false;
     protected $fillable = array('name', 'breed', 'color','sex','microchip', 'birthdate', 'notes', 'description');
-    protected $dates=['birthdate'];
-    
 
     public function background() {
         return $this->hasMany('App\Background');
@@ -32,6 +28,5 @@ class Dog extends Model
     public function message(){
         return $this->hasMany('App\Message');
     }
-    
     
 }
